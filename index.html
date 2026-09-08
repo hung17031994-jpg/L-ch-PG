@@ -40,6 +40,7 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: bold;
         }
         .btn:hover {
             background-color: #357ae8;
@@ -67,26 +68,9 @@
         }
         .info-box {
             background: #e9ecef;
-            padding: 10px;
+            padding: 15px;
             border-radius: 5px;
             margin-bottom: 15px;
-        }
-        #admin-panel {
-            background-color: #fff3cd;
-            border: 1px solid #ffeeba;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-            font-size: 14px;
         }
     </style>
 </head>
@@ -99,97 +83,69 @@
     <div id="login-section" class="section active">
         <p style="text-align: center;">Vui lòng đăng nhập để sử dụng dịch vụ</p>
         <button class="btn" onclick="login()"><img src="https://img.icons8.com/color/16/000000/google-logo.png" style="vertical-align: middle; margin-right: 8px;">Đăng nhập bằng Gmail</button>
-        <hr>
-        <button class="btn" style="background-color: #333;" onclick="showAdmin()">Đăng nhập dành cho Quản trị viên</button>
     </div>
 
     <!-- Giao diện Khách hàng -->
     <div id="customer-section" class="section">
-        <h2>Xin chào, Khách hàng</h2>
+        <h2>Tạo Yêu Cầu</h2>
         
         <div class="info-box">
-            <h3>Nạp Tiền Giao Dịch</h3>
-            <p>Vui lòng chuyển khoản qua MoMo để nạp tiền vào hệ thống.</p>
-            <p><strong>Số MoMo:</strong> 0123456789 (Tên giả/Tài khoản ảo của hệ thống)</p>
-            <p><strong>Nội dung CK:</strong> NAPTIEN + Gmail của bạn</p>
-            <button class="btn btn-momo">Xác nhận đã chuyển tiền</button>
+            <h3>1. Nạp Tiền Giao Dịch</h3>
+            <p>Vui lòng chuyển khoản qua MoMo trước khi tạo yêu cầu.</p>
+            <p><strong>Số MoMo:</strong> 0123456789</p>
+            <p><strong>Nội dung:</strong> YESIDO + ID Hệ thống của bạn</p>
+            <button class="btn btn-momo">Tôi đã chuyển tiền</button>
         </div>
 
         <div class="info-box">
-            <h3>Tạo Yêu Cầu Bấm Call Thay</h3>
-            <div class="input-group">
-                <label>Nhập ID hệ thống của bạn:</label>
-                <input type="text" id="customerId" placeholder="Nhập ID để admin xử lý...">
-            </div>
-            <div class="input-group">
-                <label>Số điểm (số lượng call muốn nhờ bấm):</label>
-                <input type="number" id="callPoints" min="1" value="1" oninput="calculatePrice()">
-            </div>
-            <p style="color: red; font-weight: bold;">Tổng tiền: <span id="totalPrice">2,000</span> VNĐ</p>
-            <p style="font-size: 12px; color: #555;">(Dưới 5 điểm: 2k/điểm. Từ 5 điểm trở lên: 1k/điểm)</p>
+            <h3>2. Gửi Thông Tin Cho Hệ Thống</h3>
             
-            <div class="input-group">
-                <label>Tải ảnh Check-in (số ảnh = số điểm):</label>
-                <input type="file" id="checkinPhotos" multiple accept="image/*">
-            </div>
-            
-            <button class="btn" onclick="submitRequest()">Gửi Thông Tin Yêu Cầu</button>
-        </div>
-        <button class="btn" style="background-color: #ccc; color: black;" onclick="logout()">Đăng xuất</button>
-    </div>
+            <!-- Form gửi dữ liệu qua Web3Forms -->
+            <form id="yesidoForm">
+                <!-- f8ce67d1-a3fa-445f-ba47-5314b9527958 -->
+                <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+                <input type="hidden" name="subject" value="Đơn hàng mới từ App Yes I Do!">
+                <input type="hidden" name="from_name" value="Yes I Do System">
+                <input type="hidden" name="Tong_Tien" id="hiddenTotalPrice" value="2000 VNĐ">
 
-    <!-- Giao diện Admin -->
-    <div id="admin-section" class="section" id="admin-panel">
-        <h2>Quản Trị Hệ Thống: Phùng Trần Phi Hùng</h2>
-        <p>Danh sách khách hàng yêu cầu bấm call thay:</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID Khách</th>
-                    <th>Số Điểm</th>
-                    <th>Tổng Tiền</th>
-                    <th>Ảnh Checkin</th>
-                    <th>Trạng Thái</th>
-                </tr>
-            </thead>
-            <tbody id="adminTableBody">
-                <!-- Dữ liệu mẫu -->
-                <tr>
-                    <td>USER_9981</td>
-                    <td>6</td>
-                    <td>6,000 VNĐ</td>
-                    <td><a href="#">Xem 6 ảnh</a></td>
-                    <td>Đang chờ xử lý</td>
-                </tr>
-            </tbody>
-        </table>
-        <br>
-        <button class="btn" style="background-color: #ccc; color: black;" onclick="logout()">Đăng xuất Admin</button>
+                <div class="input-group">
+                    <label>Nhập ID hệ thống của bạn:</label>
+                    <input type="text" name="ID_Khach_Hang" id="customerId" placeholder="Nhập ID để nhận diện..." required>
+                </div>
+                
+                <div class="input-group">
+                    <label>Số điểm (số lượng call nhờ bấm):</label>
+                    <input type="number" name="So_Diem" id="callPoints" min="1" value="1" oninput="calculatePrice()" required>
+                </div>
+                
+                <p style="color: red; font-weight: bold;">Tổng tiền cần thanh toán: <span id="totalPrice">2,000</span> VNĐ</p>
+                <p style="font-size: 12px; color: #555;">(Dưới 5 điểm: 2k/điểm. Từ 5 điểm trở lên: 1k/điểm)</p>
+                
+                <div class="input-group">
+                    <label>Tải ảnh Check-in lên (số ảnh = số điểm):</label>
+                    <!-- Chú ý thuộc tính name="attachment[]" để Web3Forms nhận diện file tải lên -->
+                    <input type="file" name="attachment[]" id="checkinPhotos" multiple accept="image/*" required>
+                </div>
+                
+                <button type="submit" class="btn" id="submitBtn">Gửi Yêu Cầu Tới Admin</button>
+            </form>
+        </div>
+        <button class="btn" style="background-color: #ccc; color: black;" onclick="logout()">Quay lại / Đăng xuất</button>
     </div>
 </div>
 
 <script>
-    function switchSection(sectionId) {
-        document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-        document.getElementById(sectionId).classList.add('active');
-    }
-
     function login() {
-        // Mô phỏng đăng nhập Gmail thành công
-        alert("Đăng nhập Gmail thành công!");
-        switchSection('customer-section');
-    }
-
-    function showAdmin() {
-        // Đi tới thẳng trang quản lý của bạn
-        switchSection('admin-section');
+        // Mô phỏng đăng nhập thành công
+        alert("Đăng nhập thành công!");
+        document.getElementById('login-section').classList.remove('active');
+        document.getElementById('customer-section').classList.add('active');
     }
 
     function logout() {
-        switchSection('login-section');
-        document.getElementById('customerId').value = '';
-        document.getElementById('callPoints').value = '1';
-        document.getElementById('checkinPhotos').value = '';
+        document.getElementById('customer-section').classList.remove('active');
+        document.getElementById('login-section').classList.add('active');
+        document.getElementById('yesidoForm').reset();
         calculatePrice();
     }
 
@@ -197,47 +153,59 @@
         const points = parseInt(document.getElementById('callPoints').value) || 0;
         let pricePerPoint = points >= 5 ? 1000 : 2000;
         let total = points * pricePerPoint;
+        
+        // Hiển thị ra màn hình
         document.getElementById('totalPrice').innerText = total.toLocaleString('vi-VN');
+        // Lưu vào form ẩn để gửi về mail
+        document.getElementById('hiddenTotalPrice').value = total.toLocaleString('vi-VN') + " VNĐ";
     }
 
-    function submitRequest() {
-        const id = document.getElementById('customerId').value;
-        const points = document.getElementById('callPoints').value;
+    // Xử lý gửi Form không cần tải lại trang
+    const form = document.getElementById('yesidoForm');
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Chặn việc web tải lại trang
+        
+        const points = parseInt(document.getElementById('callPoints').value);
         const photos = document.getElementById('checkinPhotos').files;
 
-        if (!id) {
-            alert("Vui lòng nhập ID!");
+        // Kiểm tra số lượng ảnh có khớp số điểm không
+        if (photos.length !== points) {
+            alert("Lỗi: Số lượng ảnh bạn chọn (" + photos.length + ") không khớp với số điểm bạn đặt (" + points + "). Vui lòng chọn lại!");
             return;
         }
 
-        if (photos.length !== parseInt(points)) {
-            alert("Số lượng ảnh cung cấp (" + photos.length + ") phải bằng đúng với số điểm bấm call (" + points + ").");
-            return;
-        }
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.innerText = "Đang gửi dữ liệu...";
+        submitBtn.disabled = true;
 
-        // Mô phỏng gửi dữ liệu cho admin (bạn)
-        alert("Yêu cầu đã được gửi thành công đến hệ thống của Admin! Vui lòng chờ admin lấy ID và ảnh để xử lý.");
-        
-        // Thêm dữ liệu vào bảng admin để mô phỏng
-        const total = document.getElementById('totalPrice').innerText;
-        const tbody = document.getElementById('adminTableBody');
-        const row = `<tr>
-                        <td>${id}</td>
-                        <td>${points}</td>
-                        <td>${total} VNĐ</td>
-                        <td><a href="#">Xem ${photos.length} ảnh</a></td>
-                        <td>Mới nhận</td>
-                    </tr>`;
-        tbody.innerHTML += row;
-        
-        // Reset form
-        document.getElementById('customerId').value = '';
-        document.getElementById('callPoints').value = '1';
-        document.getElementById('checkinPhotos').value = '';
-        calculatePrice();
-    }
+        const formData = new FormData(form);
+
+        fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+        })
+        .then(async (response) => {
+            if (response.status === 200) {
+                alert("Thành công! Yêu cầu và ảnh đã được gửi thẳng tới Gmail của Admin.");
+                form.reset();
+                calculatePrice();
+            } else {
+                let json = await response.json();
+                alert("Có lỗi xảy ra: " + json.message);
+            }
+        })
+        .catch(error => {
+            alert("Lỗi kết nối mạng, vui lòng thử lại!");
+        })
+        .finally(() => {
+            submitBtn.innerText = "Gửi Yêu Cầu Tới Admin";
+            submitBtn.disabled = false;
+        });
+    });
 </script>
 
 </body>
 </html>
+
 
