@@ -5,207 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yes I Do - Dịch vụ Bấm Call Thay</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        h1, h2, h3 {
-            text-align: center;
-            color: #333;
-        }
-        .section {
-            display: none;
-        }
-        .section.active {
-            display: block;
-        }
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            background-color: #4285F4;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        .btn:hover {
-            background-color: #357ae8;
-        }
-        .btn-momo {
-            background-color: #a50064;
-        }
-        .btn-momo:hover {
-            background-color: #8a0053;
-        }
-        .input-group {
-            margin-bottom: 15px;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .info-box {
-            background: #e9ecef;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-        }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; }
+        .container { max-width: 500px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1, h3 { text-align: center; color: #333; }
+        .btn { display: block; width: 100%; padding: 10px; margin: 15px 0; background-color: #4285F4; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        .btn:hover { background-color: #357ae8; }
+        .btn-momo { background-color: #a50064; margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .input-group input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        .info-box { background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>Yes I Do</h1>
-
-    <!-- Phần Đăng nhập -->
-    <div id="login-section" class="section active">
-        <p style="text-align: center;">Vui lòng đăng nhập để sử dụng dịch vụ</p>
-        <button class="btn" onclick="login()"><img src="https://img.icons8.com/color/16/000000/google-logo.png" style="vertical-align: middle; margin-right: 8px;">Đăng nhập bằng Gmail</button>
+    
+    <div class="info-box">
+        <h3>1. Nạp Tiền Giao Dịch</h3>
+        <p><strong>Số MoMo:</strong> 0123456789</p>
+        <p><strong>Nội dung:</strong> YESIDO + ID Hệ thống của bạn</p>
+        <button class="btn btn-momo">Tôi đã chuyển tiền</button>
     </div>
 
-    <!-- Giao diện Khách hàng -->
-    <div id="customer-section" class="section">
-        <h2>Tạo Yêu Cầu</h2>
+    <div class="info-box">
+        <h3>2. Gửi Thông Tin Cho Hệ Thống</h3>
         
-        <div class="info-box">
-            <h3>1. Nạp Tiền Giao Dịch</h3>
-            <p>Vui lòng chuyển khoản qua MoMo trước khi tạo yêu cầu.</p>
-            <p><strong>Số MoMo:</strong> 0123456789</p>
-            <p><strong>Nội dung:</strong> YESIDO + ID Hệ thống của bạn</p>
-            <button class="btn btn-momo">Tôi đã chuyển tiền</button>
-        </div>
-
-        <div class="info-box">
-            <h3>2. Gửi Thông Tin Cho Hệ Thống</h3>
+        <!-- Form gửi qua Forminit -->
+        <form action="https://forminit.com/f/ysw4soq3x1h" method="POST" enctype="multipart/form-data" id="yesidoForm">
             
-            <!-- Form gửi dữ liệu qua Web3Forms -->
-            <form id="yesidoForm">
-                <!-- f8ce67d1-a3fa-445f-ba47-5314b9527958 -->
-                <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
-                <input type="hidden" name="subject" value="Đơn hàng mới từ App Yes I Do!">
-                <input type="hidden" name="from_name" value="Yes I Do System">
-                <input type="hidden" name="Tong_Tien" id="hiddenTotalPrice" value="2000 VNĐ">
-
-                <div class="input-group">
-                    <label>Nhập ID hệ thống của bạn:</label>
-                    <input type="text" name="ID_Khach_Hang" id="customerId" placeholder="Nhập ID để nhận diện..." required>
-                </div>
-                
-                <div class="input-group">
-                    <label>Số điểm (số lượng call nhờ bấm):</label>
-                    <input type="number" name="So_Diem" id="callPoints" min="1" value="1" oninput="calculatePrice()" required>
-                </div>
-                
-                <p style="color: red; font-weight: bold;">Tổng tiền cần thanh toán: <span id="totalPrice">2,000</span> VNĐ</p>
-                <p style="font-size: 12px; color: #555;">(Dưới 5 điểm: 2k/điểm. Từ 5 điểm trở lên: 1k/điểm)</p>
-                
-                <div class="input-group">
-                    <label>Tải ảnh Check-in lên (số ảnh = số điểm):</label>
-                    <!-- Chú ý thuộc tính name="attachment[]" để Web3Forms nhận diện file tải lên -->
-                    <input type="file" name="attachment[]" id="checkinPhotos" multiple accept="image/*" required>
-                </div>
-                
-                <button type="submit" class="btn" id="submitBtn">Gửi Yêu Cầu Tới Admin</button>
-            </form>
-        </div>
-        <button class="btn" style="background-color: #ccc; color: black;" onclick="logout()">Quay lại / Đăng xuất</button>
+            <div class="input-group">
+                <label>Nhập ID hệ thống của bạn:</label>
+                <input type="text" name="ID_Khach_Hang" id="customerId" placeholder="Nhập ID để nhận diện..." required>
+            </div>
+            
+            <div class="input-group">
+                <label>Số điểm (số lượng call nhờ bấm):</label>
+                <input type="number" name="So_Diem" id="callPoints" min="1" value="1" oninput="calculatePrice()" required>
+            </div>
+            
+            <p style="color: red; font-weight: bold;">Tổng tiền thanh toán: <span id="totalPriceDisplay">2,000</span> VNĐ</p>
+            <input type="hidden" name="Tong_Tien" id="hiddenTotalPrice" value="2000 VNĐ">
+            
+            <div class="input-group">
+                <label>Tải ảnh Check-in (số ảnh = số điểm):</label>
+                <input type="file" name="Anh_Checkin[]" id="checkinPhotos" multiple accept="image/*" required>
+            </div>
+            
+            <button type="submit" class="btn" id="submitBtn">Gửi Yêu Cầu Tới Admin</button>
+        </form>
     </div>
 </div>
 
 <script>
-    function login() {
-        // Mô phỏng đăng nhập thành công
-        alert("Đăng nhập thành công!");
-        document.getElementById('login-section').classList.remove('active');
-        document.getElementById('customer-section').classList.add('active');
-    }
-
-    function logout() {
-        document.getElementById('customer-section').classList.remove('active');
-        document.getElementById('login-section').classList.add('active');
-        document.getElementById('yesidoForm').reset();
-        calculatePrice();
-    }
-
     function calculatePrice() {
         const points = parseInt(document.getElementById('callPoints').value) || 0;
-        let pricePerPoint = points >= 5 ? 1000 : 2000;
-        let total = points * pricePerPoint;
+        let total = points >= 5 ? points * 1000 : points * 2000;
         
-        // Hiển thị ra màn hình
-        document.getElementById('totalPrice').innerText = total.toLocaleString('vi-VN');
-        // Lưu vào form ẩn để gửi về mail
+        document.getElementById('totalPriceDisplay').innerText = total.toLocaleString('vi-VN');
         document.getElementById('hiddenTotalPrice').value = total.toLocaleString('vi-VN') + " VNĐ";
     }
 
-    // Xử lý gửi Form không cần tải lại trang
-    const form = document.getElementById('yesidoForm');
-    
-    form.addEventListener('submit', function(e) {
-        e.preventDefault(); // Chặn việc web tải lại trang
-        
+    document.getElementById('yesidoForm').addEventListener('submit', function(e) {
         const points = parseInt(document.getElementById('callPoints').value);
         const photos = document.getElementById('checkinPhotos').files;
 
-        // Kiểm tra số lượng ảnh có khớp số điểm không
+        // Kiểm tra số lượng ảnh và số điểm
         if (photos.length !== points) {
-            alert("Lỗi: Số lượng ảnh bạn chọn (" + photos.length + ") không khớp với số điểm bạn đặt (" + points + "). Vui lòng chọn lại!");
-            return;
+            e.preventDefault(); 
+            alert("Lỗi: Bạn đã tải lên " + photos.length + " ảnh, nhưng nhập " + points + " điểm. Vui lòng chọn lại số lượng ảnh cho khớp!");
+        } else {
+            document.getElementById('submitBtn').innerText = "Đang tải ảnh và gửi đi...";
+            document.getElementById('submitBtn').style.backgroundColor = "#ccc";
         }
-
-        const submitBtn = document.getElementById('submitBtn');
-        submitBtn.innerText = "Đang gửi dữ liệu...";
-        submitBtn.disabled = true;
-
-        const formData = new FormData(form);
-
-        fetch('https://api.web3forms.com/submit', {
-            method: 'POST',
-            body: formData
-        })
-        .then(async (response) => {
-            if (response.status === 200) {
-                alert("Thành công! Yêu cầu và ảnh đã được gửi thẳng tới Gmail của Admin.");
-                form.reset();
-                calculatePrice();
-            } else {
-                let json = await response.json();
-                alert("Có lỗi xảy ra: " + json.message);
-            }
-        })
-        .catch(error => {
-            alert("Lỗi kết nối mạng, vui lòng thử lại!");
-        })
-        .finally(() => {
-            submitBtn.innerText = "Gửi Yêu Cầu Tới Admin";
-            submitBtn.disabled = false;
-        });
     });
 </script>
 
 </body>
 </html>
+
 
 
