@@ -3,339 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ thống xếp lịch PG - Chăm sóc thị trường</title>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <title>Yes I Do - Dịch vụ Bấm Call Thay</title>
     <style>
-        :root {
-            --habeco-red: #D31145;
-            --habeco-gold: #FFC000;
-            --bg-gray: #f5f6fa;
-        }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
             margin: 0;
             padding: 20px;
-            background-color: var(--bg-gray);
-            display: flex;
-            gap: 20px;
         }
-        h2 { color: var(--habeco-red); margin-top: 0; }
-        
-        /* Sidebar layout */
-        .sidebar {
-            width: 320px;
-            background: white;
-            padding: 15px;
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            height: calc(100vh - 40px);
-            display: flex;
-            flex-direction: column;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-
-        /* Form thêm/sửa quán */
-        .venue-form {
-            background: #f8f9fa;
+        h1, h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        .btn {
+            display: block;
+            width: 100%;
             padding: 10px;
+            margin: 10px 0;
+            background-color: #4285F4;
+            color: white;
+            border: none;
             border-radius: 5px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
+            cursor: pointer;
+            font-size: 16px;
         }
-        .venue-form input, .venue-form select {
+        .btn:hover {
+            background-color: #357ae8;
+        }
+        .btn-momo {
+            background-color: #a50064;
+        }
+        .btn-momo:hover {
+            background-color: #8a0053;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .input-group input {
             width: 100%;
             padding: 8px;
-            margin-bottom: 8px;
+            box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 4px;
-            box-sizing: border-box;
         }
-        .venue-form button {
-            width: 100%;
-            padding: 8px;
-            background-color: var(--habeco-red);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .venue-form button:hover { background-color: #a00b33; }
-
-        /* Danh sách quán */
-        #venue-list {
-            flex-grow: 1;
-            overflow-y: auto;
-            margin-bottom: 15px;
-            padding-right: 5px;
-        }
-        
-        /* Thiết kế thẻ quán Flexbox */
-        .venue-item {
-            background-color: #fff;
-            border: 2px solid var(--habeco-red);
-            color: #333;
+        .info-box {
+            background: #e9ecef;
             padding: 10px;
-            margin-bottom: 10px;
             border-radius: 5px;
-            cursor: grab;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            margin-bottom: 15px;
         }
-        .venue-item.vip {
-            background-color: var(--habeco-gold);
-            border-color: #e6ac00;
+        #admin-panel {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
         }
-        .venue-info {
-            flex-grow: 1;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
         }
-        .venue-name {
-            font-weight: bold;
-            font-size: 13px;
+        table, th, td {
+            border: 1px solid #ddd;
         }
-        .venue-address {
-            display: block;
-            font-size: 11px;
-            font-weight: normal;
-            color: #555;
-            margin-top: 3px;
+        th, td {
+            padding: 8px;
+            text-align: left;
+            font-size: 14px;
         }
-        .venue-actions {
-            display: flex;
-            gap: 5px;
-            margin-left: 10px;
-        }
-        
-        /* Nút Sửa/Xóa */
-        .btn-edit, .btn-delete {
-            padding: 5px 8px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            color: white;
-        }
-        .btn-edit { background-color: #2980b9; }
-        .btn-delete { background-color: #c0392b; }
-
-        /* Main Board & Table */
-        .main-board {
-            flex-grow: 1;
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            overflow-x: auto;
-        }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; vertical-align: top; min-width: 120px; }
-        th { background-color: var(--habeco-red); color: white; position: sticky; top: 0; }
-        .team-title { font-weight: bold; background-color: #f1f2f6; color: #2f3640; }
-        
-        .pg-slot { min-height: 40px; background-color: #f8f9fa; border: 1px dashed #ccc; margin-bottom: 5px; border-radius: 4px; padding: 5px; display: flex; flex-direction: column; gap: 5px; }
-        .pg-slot-title { font-size: 11px; color: #7f8fa6; margin-bottom: 2px; }
-        
-        /* --- MAGIC CSS TRICK: Ẩn nút và địa chỉ khi vào trong lịch --- */
-        .pg-slot .venue-actions { display: none; }
-        .pg-slot .venue-address { display: none; }
-        .pg-slot .venue-item { 
-            padding: 5px; 
-            margin-bottom: 0; 
-            justify-content: center; /* Căn giữa tên quán */
-        }
-        .pg-slot .venue-info { text-align: center; }
-        
-        #trash-can { padding: 15px; background-color: #ffeaa7; border: 2px dashed #d63031; text-align: center; border-radius: 8px; color: #d63031; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <h2>Kho Quán</h2>
-        
-        <!-- Khu vực quản lý (Thêm/Sửa) -->
-        <div class="venue-form">
-            <input type="hidden" id="edit-id" value="">
-            <input type="text" id="venue-name" placeholder="Tên quán (VD: Hải Xồm)" required>
-            <input type="text" id="venue-address" placeholder="Địa chỉ (VD: 91 Hoàng Quốc Việt)">
-            <select id="venue-tier">
-                <option value="normal">Quán Thường</option>
-                <option value="vip">Quán Trọng Điểm (VIP)</option>
-            </select>
-            <button id="btn-save" onclick="saveVenue()">+ Thêm Quán Mới</button>
-            <button id="btn-cancel" onclick="resetForm()" style="display:none; background-color:#7f8fa6; margin-top:5px;">Hủy / Chuyển sang Thêm mới</button>
-        </div>
+<div class="container">
+    <h1>Yes I Do</h1>
 
-        <p style="font-size: 12px; color: #666; margin-bottom: 5px;">*Kéo thả thẻ quán vào lịch:</p>
-        
-        <!-- Nơi chứa danh sách quán -->
-        <div id="venue-list"></div>
-
-        <div id="trash-can">🗑️ Kéo thẻ từ lịch vào đây để Xóa</div>
+    <!-- Phần Đăng nhập -->
+    <div id="login-section" class="section active">
+        <p style="text-align: center;">Vui lòng đăng nhập để sử dụng dịch vụ</p>
+        <button class="btn" onclick="login()"><img src="https://img.icons8.com/color/16/000000/google-logo.png" style="vertical-align: middle; margin-right: 8px;">Đăng nhập bằng Gmail</button>
+        <hr>
+        <button class="btn" style="background-color: #333;" onclick="showAdmin()">Đăng nhập dành cho Quản trị viên</button>
     </div>
 
-    <!-- Main Board -->
-    <div class="main-board">
-        <h2>Bảng Phân Bổ PG</h2>
+    <!-- Giao diện Khách hàng -->
+    <div id="customer-section" class="section">
+        <h2>Xin chào, Khách hàng</h2>
+        
+        <div class="info-box">
+            <h3>Nạp Tiền Giao Dịch</h3>
+            <p>Vui lòng chuyển khoản qua MoMo để nạp tiền vào hệ thống.</p>
+            <p><strong>Số MoMo:</strong> 0123456789 (Tên giả/Tài khoản ảo của hệ thống)</p>
+            <p><strong>Nội dung CK:</strong> NAPTIEN + Gmail của bạn</p>
+            <button class="btn btn-momo">Xác nhận đã chuyển tiền</button>
+        </div>
+
+        <div class="info-box">
+            <h3>Tạo Yêu Cầu Bấm Call Thay</h3>
+            <div class="input-group">
+                <label>Nhập ID hệ thống của bạn:</label>
+                <input type="text" id="customerId" placeholder="Nhập ID để admin xử lý...">
+            </div>
+            <div class="input-group">
+                <label>Số điểm (số lượng call muốn nhờ bấm):</label>
+                <input type="number" id="callPoints" min="1" value="1" oninput="calculatePrice()">
+            </div>
+            <p style="color: red; font-weight: bold;">Tổng tiền: <span id="totalPrice">2,000</span> VNĐ</p>
+            <p style="font-size: 12px; color: #555;">(Dưới 5 điểm: 2k/điểm. Từ 5 điểm trở lên: 1k/điểm)</p>
+            
+            <div class="input-group">
+                <label>Tải ảnh Check-in (số ảnh = số điểm):</label>
+                <input type="file" id="checkinPhotos" multiple accept="image/*">
+            </div>
+            
+            <button class="btn" onclick="submitRequest()">Gửi Thông Tin Yêu Cầu</button>
+        </div>
+        <button class="btn" style="background-color: #ccc; color: black;" onclick="logout()">Đăng xuất</button>
+    </div>
+
+    <!-- Giao diện Admin -->
+    <div id="admin-section" class="section" id="admin-panel">
+        <h2>Quản Trị Hệ Thống: Phùng Trần Phi Hùng</h2>
+        <p>Danh sách khách hàng yêu cầu bấm call thay:</p>
         <table>
             <thead>
-                <tr><th>Team</th><th>Thứ 2</th><th>Thứ 3</th><th>Thứ 4</th><th>Thứ 5</th><th>Thứ 6</th><th>Thứ 7</th><th>Chủ Nhật</th></tr>
+                <tr>
+                    <th>ID Khách</th>
+                    <th>Số Điểm</th>
+                    <th>Tổng Tiền</th>
+                    <th>Ảnh Checkin</th>
+                    <th>Trạng Thái</th>
+                </tr>
             </thead>
-            <tbody id="schedule-body">
-                <!-- Team 4: 2 Slots -->
+            <tbody id="adminTableBody">
+                <!-- Dữ liệu mẫu -->
                 <tr>
-                    <td class="team-title">Team 4<br><small>(2 PGs)</small></td>
-                    <script>
-                        for(let i=0; i<7; i++) {
-                            document.write('<td><div class="pg-slot-title">PG 1</div><div class="pg-slot dropzone"></div><div class="pg-slot-title">PG 2</div><div class="pg-slot dropzone"></div></td>');
-                        }
-                    </script>
-                </tr>
-                <!-- Team 5: 2 Slots -->
-                <tr>
-                    <td class="team-title">Team 5<br><small>(2 PGs)</small></td>
-                    <script>
-                        for(let i=0; i<7; i++) {
-                            document.write('<td><div class="pg-slot-title">PG 1</div><div class="pg-slot dropzone"></div><div class="pg-slot-title">PG 2</div><div class="pg-slot dropzone"></div></td>');
-                        }
-                    </script>
-                </tr>
-                <!-- Team 6: 4 Slots -->
-                <tr>
-                    <td class="team-title">Team 6<br><small>(4 PGs)</small></td>
-                    <script>
-                        for(let i=0; i<7; i++) {
-                            document.write('<td><div class="pg-slot-title">PG 1</div><div class="pg-slot dropzone"></div><div class="pg-slot-title">PG 2</div><div class="pg-slot dropzone"></div><div class="pg-slot-title">PG 3</div><div class="pg-slot dropzone"></div><div class="pg-slot-title">PG 4</div><div class="pg-slot dropzone"></div></td>');
-                        }
-                    </script>
+                    <td>USER_9981</td>
+                    <td>6</td>
+                    <td>6,000 VNĐ</td>
+                    <td><a href="#">Xem 6 ảnh</a></td>
+                    <td>Đang chờ xử lý</td>
                 </tr>
             </tbody>
         </table>
+        <br>
+        <button class="btn" style="background-color: #ccc; color: black;" onclick="logout()">Đăng xuất Admin</button>
     </div>
+</div>
 
-    <script>
-        // Lấy dữ liệu hoặc dùng dữ liệu mẫu
-        let venues = JSON.parse(localStorage.getItem('habeco_venues')) || [
-            { id: 1, name: "Bia Hơi Hải Xồm", address: "86B Lê Trọng Tấn", tier: "vip" },
-            { id: 2, name: "Thu Hằng", address: "67 Ngô Thì Nhậm", tier: "normal" }
-        ];
+<script>
+    function switchSection(sectionId) {
+        document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+    }
 
-        function renderVenues() {
-            const listEl = document.getElementById('venue-list');
-            listEl.innerHTML = '';
-            
-            venues.forEach(v => {
-                const tierClass = v.tier === 'vip' ? 'vip' : '';
-                
-                // Khởi tạo thẻ quán chứa luôn nút bấm
-                const dragItem = document.createElement('div');
-                dragItem.className = `venue-item ${tierClass}`;
-                dragItem.dataset.id = v.id;
-                
-                dragItem.innerHTML = `
-                    <div class="venue-info">
-                        <div class="venue-name">${v.name}</div>
-                        <div class="venue-address">${v.address}</div>
-                    </div>
-                    <div class="venue-actions">
-                        <button class="btn-edit" onclick="loadVenueToForm(${v.id})">Sửa</button>
-                        <button class="btn-delete" onclick="deleteVenue(${v.id})">X</button>
-                    </div>
-                `;
-                
-                listEl.appendChild(dragItem);
-            });
-            
-            saveToStorage();
+    function login() {
+        // Mô phỏng đăng nhập Gmail thành công
+        alert("Đăng nhập Gmail thành công!");
+        switchSection('customer-section');
+    }
+
+    function showAdmin() {
+        // Đi tới thẳng trang quản lý của bạn
+        switchSection('admin-section');
+    }
+
+    function logout() {
+        switchSection('login-section');
+        document.getElementById('customerId').value = '';
+        document.getElementById('callPoints').value = '1';
+        document.getElementById('checkinPhotos').value = '';
+        calculatePrice();
+    }
+
+    function calculatePrice() {
+        const points = parseInt(document.getElementById('callPoints').value) || 0;
+        let pricePerPoint = points >= 5 ? 1000 : 2000;
+        let total = points * pricePerPoint;
+        document.getElementById('totalPrice').innerText = total.toLocaleString('vi-VN');
+    }
+
+    function submitRequest() {
+        const id = document.getElementById('customerId').value;
+        const points = document.getElementById('callPoints').value;
+        const photos = document.getElementById('checkinPhotos').files;
+
+        if (!id) {
+            alert("Vui lòng nhập ID!");
+            return;
         }
 
-        function saveVenue() {
-            const idInput = document.getElementById('edit-id').value;
-            const nameInput = document.getElementById('venue-name').value.trim();
-            const addressInput = document.getElementById('venue-address').value.trim();
-            const tierInput = document.getElementById('venue-tier').value;
-
-            if (!nameInput) { alert("Vui lòng nhập tên quán!"); return; }
-
-            if (idInput) {
-                const venue = venues.find(v => v.id == idInput);
-                if(venue) {
-                    venue.name = nameInput; venue.address = addressInput; venue.tier = tierInput;
-                }
-            } else {
-                venues.push({ id: Date.now(), name: nameInput, address: addressInput, tier: tierInput });
-            }
-            
-            resetForm(); renderVenues();
+        if (photos.length !== parseInt(points)) {
+            alert("Số lượng ảnh cung cấp (" + photos.length + ") phải bằng đúng với số điểm bấm call (" + points + ").");
+            return;
         }
 
-        function loadVenueToForm(id) {
-            const venue = venues.find(v => v.id == id);
-            if(venue) {
-                document.getElementById('edit-id').value = venue.id;
-                document.getElementById('venue-name').value = venue.name;
-                document.getElementById('venue-address').value = venue.address;
-                document.getElementById('venue-tier').value = venue.tier;
-                
-                document.getElementById('btn-save').innerText = "💾 Lưu Thay Đổi";
-                document.getElementById('btn-save').style.backgroundColor = "#27ae60";
-                document.getElementById('btn-cancel').style.display = "block";
-            }
-        }
+        // Mô phỏng gửi dữ liệu cho admin (bạn)
+        alert("Yêu cầu đã được gửi thành công đến hệ thống của Admin! Vui lòng chờ admin lấy ID và ảnh để xử lý.");
+        
+        // Thêm dữ liệu vào bảng admin để mô phỏng
+        const total = document.getElementById('totalPrice').innerText;
+        const tbody = document.getElementById('adminTableBody');
+        const row = `<tr>
+                        <td>${id}</td>
+                        <td>${points}</td>
+                        <td>${total} VNĐ</td>
+                        <td><a href="#">Xem ${photos.length} ảnh</a></td>
+                        <td>Mới nhận</td>
+                    </tr>`;
+        tbody.innerHTML += row;
+        
+        // Reset form
+        document.getElementById('customerId').value = '';
+        document.getElementById('callPoints').value = '1';
+        document.getElementById('checkinPhotos').value = '';
+        calculatePrice();
+    }
+</script>
 
-        function deleteVenue(id) {
-            if(confirm("Bạn có chắc chắn muốn xóa quán này?")) {
-                venues = venues.filter(v => v.id != id);
-                renderVenues();
-            }
-        }
-
-        function resetForm() {
-            document.getElementById('edit-id').value = "";
-            document.getElementById('venue-name').value = "";
-            document.getElementById('venue-address').value = "";
-            document.getElementById('venue-tier').value = "normal";
-            
-            document.getElementById('btn-save').innerText = "+ Thêm Quán Mới";
-            document.getElementById('btn-save').style.backgroundColor = "var(--habeco-red)";
-            document.getElementById('btn-cancel').style.display = "none";
-        }
-
-        function saveToStorage() { localStorage.setItem('habeco_venues', JSON.stringify(venues)); }
-
-        renderVenues();
-
-        // Khởi tạo Sortable kéo thả, loại bỏ các nút bấm khỏi sự kiện kéo (filter)
-        new Sortable(document.getElementById('venue-list'), {
-            group: { name: 'shared', pull: 'clone', put: false },
-            filter: 'button', // Không kéo khi lỡ tay bấm vào nút Sửa/Xóa
-            preventOnFilter: false, 
-            sort: false,
-            animation: 150
-        });
-
-        const dropzones = document.querySelectorAll('.dropzone');
-        dropzones.forEach(zone => {
-            new Sortable(zone, {
-                group: 'shared',
-                animation: 150,
-                onAdd: function (evt) {
-                    const itemEl = evt.item; 
-                    if (zone.children.length > 1) {
-                        itemEl.parentNode.removeChild(itemEl);
-                        alert("Slot này đã có lịch, mỗi PG chỉ đứng 1 quán!");
-                    }
-                }
-            });
-        });
-
-        new Sortable(document.getElementById('trash-can'), {
-            group: 'shared',
-            onAdd: function (evt) {
-                const itemEl = evt.item;
-                itemEl.parentNode.removeChild(itemEl);
-            }
-        });
-    </script>
 </body>
 </html>
+
